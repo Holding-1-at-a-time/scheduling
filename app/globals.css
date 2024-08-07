@@ -25,18 +25,297 @@
     --ring: 180 100% 90%;
     --radius: 0rem;
   }
+
+  .font-body {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+  }
+}
+.dark {
+  --background-color: #1a1a1a;
+  --foreground-color: #ffffff;
+  --card-background-color: #1a1a1a;
+  --card-foreground-color: #ffffff;
+  --popover-background-color: #1a1a1a;
+  --popover-foreground-color: #ffffff;
+  --primary-color: #ffffff;
+  --primary-color-foreground: #1a1a1a;
+  --secondary-color: #262626;
+  --secondary-color-foreground: #ffffff;
+  --muted-color: #262626;
+  --muted-color-foreground: #a6a7ab;
+  --accent-color: #262626;
+  --accent-color-foreground: #ffffff;
+  --destructive-color: #c92a2a;
+  --destructive-color-foreground: #ffffff;
+  --border-color: hsl(172, 100%, 34%);
+  --input-color: #495057;
+  --ring-color: #ffffff;
+  --chart-1-color: #4dabf7;
+  --chart-2-color: #38d9a9;
+  --chart-3-color: #fd7e14;
+  --chart-4-color: #ae3ec9;
+  --chart-5-color: #f06595;
 }
 
-@layer base {
-  * {
-    @apply border-border;
+@media (prefers-color-scheme: dark) {
+  .dark {
+    --background-color: #1a1a1a;
+    --foreground-color: #ffffff;
+    --card-background-color: #1a1a1a;
+    --card-foreground-color: #ffffff;
+    --popover-background-color: #1a1a1a;
+    --popover-foreground-color: #ffffff;
+    --primary-color: #ffffff;
+    --primary-color-foreground: #1a1a1a;
+    --secondary-color: #262626;
+    --secondary-color-foreground: #ffffff;
+    --muted-color: #262626;
+    --muted-color-foreground: #a6a7ab;
+    --accent-color: #262626;
+    --accent-color-foreground: #ffffff;
+    --destructive-color: #c92a2a;
+    --destructive-color-foreground: #ffffff;
+    --border-color: hsl(172, 100%, 34%);
+    --input-color: #495057;
+    --ring-color: #ffffff;
+    --chart-1-color: #4dabf7;
+    --chart-2-color: #38d9a9;
+    --chart-3-color: #fd7e14;
+    --chart-4-color: #ae3ec9;
+    --chart-5-color: #f06595;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Inter", sans-serif;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--foreground-color);
+  font-family: "Inter", sans-serif;
+}
+
+.spinner-3d {
+  width: 6rem;
+  height: 6rem;
+  position: relative;
+  perspective: 1000px;
+}
+
+.spinner-layer {
+  width: 100%;
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--muted-color), var(--accent-color));
+  position: absolute;
+  animation: spinner-3d 3s linear infinite;
+  box-shadow: 0 0 20px rgba(0, 174, 152, 0.5), 0 0 30px rgba(0, 174, 152, 0.3), 0 0 40px rgba(0, 174, 152, 0.2);
+}
+
+.spinner-layer::before,
+.spinner-layer::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 9999px;
+  background: inherit;
+  animation: inherit;
+}
+
+.spinner-layer::before {
+  transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+}
+
+.spinner-layer::after {
+  transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+}
+
+.spinner-layer.delay-1 {
+  animation-delay: -1s;
+}
+
+.spinner-layer.delay-2 {
+  animation-delay: -2s;
+}
+
+/* Custom styles and animations */
+:root {
+  --backgroundone-dark: #1a1a1a;
+  --backgroundone-light: #f8f9fa;
+  --primary-color: #00AE98;
+  --secondary-color: #707070;
+  --primary-foreground: #ffffff;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+.animated-3d {
+  transition: transform 0.5s;
+}
+
+.animated-3d:hover {
+  transform: rotateY(20deg) scale(1.05);
+}
+
+.hover\:shadow-3d:hover {
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.bg-backgroundone-dark {
+  background-color: var(--backgroundone-dark);
+}
+
+.bg-backgroundone-light {
+  background-color: var(--backgroundone-light);
+}
+
+.table th, .table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+.badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+}
+
+.badge.default {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.badge.secondary {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+
+.btn.outline {
+  border-color: #e5e7eb;
+  background-color: white;
+}
+
+.btn.icon {
+  width: 2rem;
+  height: 2rem;
+}
+
+.icon {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+}
+
+
+@keyframes spinner-3d {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
   }
 
-  body {
-    @apply bg-background text-foreground font-body;
+  100% {
+    transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg);
   }
+}
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-heading;
+@keyframes fade-in {
+  from {
+    opacity: 0;
   }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes parallax {
+  from {
+    background-position: 0% 0%;
+  }
+  to {
+    background-position: 100% 0%;
+  }
+}
+
+@keyframes rotate-in {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes zoom-in {
+  from {
+    transform: scale(0.5);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1);
+  }
+}
+
+/* Class definitions */
+
+.fade-in {
+  animation: fade-in 2s ease-in-out;
+}
+
+.slide-in {
+  animation: slide-in 1s ease-out;
+}
+
+.parallax {
+  animation: parallax 10s infinite alternate;
+}
+
+.rotate-in {
+  animation: rotate-in 1s ease-in-out;
+}
+
+.zoom-in {
+  animation: zoom-in 0.5s ease-in-out;
+}
+
+.pulse {
+  animation: pulse 2s infinite;
 }

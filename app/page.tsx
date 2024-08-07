@@ -83,7 +83,7 @@ function SignedInContent() {
       <p>
         <Button
           onClick={() => {
-            void addNumber({ value: Math.floor(Math.random() * 10) });
+            addNumber({ value: Math.floor(Math.random() * 10) });
           }}
         >
           Add a random number

@@ -89,3 +89,5 @@ codium.config.ts
 
 # sonar
 sonar-project.properties
+
+.env.local
