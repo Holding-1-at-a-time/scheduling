@@ -1,0 +1,91 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnpm.js
+.pnp.js
+.yarn/install-state.gz
+
+# testing
+/test
+/.yarn/integrity
+/.yarn/lock
+/.yarn/success
+/.pnpm/
+/coverage
+
+# next.js
+/.next/
+/out/
+/.cache/
+/.cache-next/
+/.cache-next/next-build-id
+
+# production
+/build
+/static
+/.next/static/chunks
+/.next/static/css
+
+# development
+/.cache/
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# env files (can opt-in for commiting if needed)
+.env*
+.env.local
+.env.development.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# convex
+convex.db
+convex.json
+
+
+# css
+*.css
+*.scss
+*.sass
+*.less
+*.styl
+*.stylus
+
+# tailwind
+tailwind.config.js
+postcss.config.js
+
+
+# jest
+jest.config.js
+jest.config.ts
+jest.config.tsx
+jest.config.js.map
+jest.config.ts.map
+
+# codiumai
+codiumai.config.js
+codiumai.config.ts
+codiumai.config.tsx
+codiumai.config.js.map
+codiumai.config.ts.map
+codium.json
+codium.config.js
+codium.config.ts
+
+# sonar
+sonar-project.properties
