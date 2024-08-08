@@ -1,37 +1,45 @@
-// This is the root layout component for your Next.js app.
-// Learn more: https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts#root-layout-required
-import { Bricolage_Grotesque, Space_Mono } from 'next/font/google'
-import { cn } from '@/lib/utils'
-import './globals.css'
-import ConvexClerkProvider from '../Providers/ConvexClerkProviders'
+// app/layout.tsx
+import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
+import { Inter } from "next/font/google";
+import Link from "next/link";
+import ConvexClerkProvider from '../Providers/ConvexClerkProviders';
 
-const fontHeading = Bricolage_Grotesque({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-heading',
-})
+const inter = Inter({ subsets: ["latin"] });
 
-const fontBody = Space_Mono({
-  subsets: ['latin'],
-  display: 'swap',
-  weights: [ `400`, `700` ],
-  variable: '--font-body',
-})
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) 
 
-export default function Layout({ children }) {
-  return (
-    <ConvexClerkProvider>
+{ 
+return (
+  <ConvexClerkProvider>
+    <Protect>
       <html lang="en">
-        <body
-          className={cn(
-            'antialiased',
-            fontHeading.variable,
-            fontBody.variable
-          )}
-        >
-          {children}
+        <body className={inter.className}>
+          <header className="bg-white shadow-sm">
+            <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
+              <Link href="/" className="font-bold text-xl">
+                Slick Solutions
+              </Link>
+              <div className="flex items-center space-x-4">
+                <OrganizationSwitcher />
+                <UserButton />
+              </div>
+            </nav>
+          </header>
+          <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            {children}
+          </main>
         </body>
       </html>
-    </ConvexClerkProvider>
-  )
-}
+    </Protect>
+  </ConvexClerkProvider>
+);
+};
+
+function Protect({ children }: { children: React.ReactNode }) {
+  return ()
+
+} 

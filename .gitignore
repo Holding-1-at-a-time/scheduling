@@ -91,3 +91,6 @@ codium.config.ts
 sonar-project.properties
 
 .env.local
+
+# Early AI
+ .early.coverage
