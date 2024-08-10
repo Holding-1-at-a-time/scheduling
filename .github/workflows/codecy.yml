@@ -1,14 +1,16 @@
 
+name: "Codacy Security Scan"
+
 on:
   push:
     branches:
-    - main
+      - main
   pull_request:
     branches:
-    - main
-    "name": "Codacy Security Scan",
-    "creator": "Codacy",
-    "description": "Free, out-of-the-box, security analysis provided by multiple open source static analysis tools.",
-    "iconName": "codacy",
+      - main
+    "name": "Codacy Security Scan"
+    "creator": "Codacy"
+    "description": "Free, out-of-the-box, security analysis provided by multiple open source static analysis tools."
+    "iconName": "codacy"
     "categories": ["Code Scanning", "javascript", "typescript"]
-}
+    
