@@ -1,3 +1,5 @@
+// File: src/components/RecentEstimatesInvoices.tsx
+
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -135,15 +137,6 @@ export const RecentEstimatesInvoices: React.FC = () => {
       : invoicesQuery && !(invoicesQuery instanceof Error)
         ? Math.ceil(invoicesQuery.totalCount / PAGE_SIZE)
         : 1;
-
-  if (!tenant) {
-    return (
-      <Alert variant="destructive">
-        <AlertTitle>Error</AlertTitle>
-        <AlertDescription>Tenant information not available</AlertDescription>
-      </Alert>
-    );
-  }
 
   if (error) {
     toast({
