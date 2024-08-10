@@ -14,15 +14,27 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 
+/**
+ * Renders the Appointment Scheduler component.
+ *
+ * This component displays a calendar and a list of appointments for the selected date.
+ * It allows the user to create new appointments, update appointment status, and cancel appointments.
+ */
 export default function AppointmentScheduler() {
+  // State to store the selected date
   const [selectedDate, setSelectedDate] = useState(new Date());
+
+  // Query to fetch appointments for the selected date
   const appointments = useQuery(api.appointments.getAppointments, {
     date: format(selectedDate, "yyyy-MM-dd"),
   });
+
+  // Mutations to create, update, and cancel appointments
   const createAppointment = useMutation(api.appointments.createAppointment);
   const updateAppointment = useMutation(api.appointments.updateAppointment);
   const cancelAppointment = useMutation(api.appointments.cancelAppointment);
 
+  // Memoize the sorted appointments by time
   const sortedAppointments = useMemo(() => {
     return (
       appointments?.sort(
@@ -31,10 +43,23 @@ export default function AppointmentScheduler() {
     );
   }, [appointments]);
 
+  /**
+   * Handles the selection of a new date in the calendar.
+   *
+   * @param {Date} date - The selected date.
+   */
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
 
+  /**
+   * Handles the creation of a new appointment.
+   *
+   * Creates a new appointment with the specified date, time, service, and status.
+   * If the creation fails, it logs the error to the console.
+   *
+   * @return {Promise<void>} A promise that resolves when the appointment is created.
+   */
   const handleAppointmentCreate = async () => {
     try {
       await createAppointment({
@@ -48,6 +73,15 @@ export default function AppointmentScheduler() {
     }
   };
 
+  /**
+   * Handles the update of an appointment status to "Completed".
+   *
+   * Updates the appointment status to "Completed".
+   * If the update fails, it logs the error to the console.
+   *
+   * @param {Object} appointment - The appointment to update.
+   * @return {Promise<void>} A promise that resolves when the appointment is updated.
+   */
   const handleAppointmentUpdate = async (appointment) => {
     try {
       await updateAppointment({
@@ -59,6 +93,15 @@ export default function AppointmentScheduler() {
     }
   };
 
+  /**
+   * Handles the cancellation of an appointment.
+   *
+   * Cancels the appointment.
+   * If the cancellation fails, it logs the error to the console.
+   *
+   * @param {Object} appointment - The appointment to cancel.
+   * @return {Promise<void>} A promise that resolves when the appointment is canceled.
+   */
   const handleAppointmentCancel = async (appointment) => {
     try {
       await cancelAppointment({ id: appointment._id });
@@ -142,3 +185,4 @@ export default function AppointmentScheduler() {
     </div>
   );
 }
+
