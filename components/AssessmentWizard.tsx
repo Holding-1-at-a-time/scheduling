@@ -1,4 +1,3 @@
-// Analysis of AssessmentWizard Component Limitations:
 'use client';
 
 import React, { useState, useCallback, useMemo } from "react";
@@ -51,7 +50,7 @@ const assessmentSchema = z.object({
 type AssessmentSchemaType = z.infer<typeof assessmentSchema>;
 
 const AssessmentWizard: React.FC = () => {
-  const { isAuthenticated, isLoading: authLoading } = useConvexAuth();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
   const createAssessment = useMutation(api.assessments.create);
   const { t } = useTranslation("common");
   const { toast } = useToast();
@@ -59,7 +58,6 @@ const AssessmentWizard: React.FC = () => {
   const [step, setStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Fetch tenant configuration
   const tenantId = useQuery(api.tenants.getCurrentTenantId);
   const tenantConfig = useQuery(
     api.tenants.getTenantConfig,
