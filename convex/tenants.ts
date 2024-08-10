@@ -27,7 +27,7 @@ export const getTenantConfig = query({
 export const updateTenantConfig = mutation({
     args: {
         allowedVehicleTypes: v.optional(v.array(v.string())),
-        maxImages: v.optional(v.number()),
+        maxImages: v.number(v.number()),
         maxVideos: v.optional(v.number()),
     },
     handler: async (ctx, args) => {

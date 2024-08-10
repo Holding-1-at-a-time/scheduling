@@ -1,7 +1,11 @@
+/**
+ * AssessmentWizard component is a multi-step form for creating an assessment.
+ * It uses React Hook Form with Zod for form validation and submission.
+ */
 'use client';
 
 import React, { useState, useCallback, useMemo } from "react";
-import { useConvexAuth } from "convex/react";
+import { useAuth } from "clerk/nextjs";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { Id } from "../convex/_generated/dataModel";
@@ -14,7 +18,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useToast } from "@/components/ui/use-toast";
@@ -23,6 +26,9 @@ import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+/**
+ * Interface for the data entered in the assessment form.
+ */
 interface AssessmentData {
   vehicleType: string;
   vehicleCondition: string;
@@ -30,6 +36,9 @@ interface AssessmentData {
   images: File[];
 }
 
+/**
+ * Interface for the tenant configuration.
+ */
 interface TenantConfig {
   id: Id<"tenants">;
   name: string;
@@ -38,6 +47,9 @@ interface TenantConfig {
 }
 
 // Define Zod schema for form validation
+/**
+ * Zod schema for form validation.
+ */
 const assessmentSchema = z.object({
   vehicleType: z.string().min(1, "Vehicle type is required"),
   vehicleCondition: z
@@ -47,23 +59,43 @@ const assessmentSchema = z.object({
   images: z.array(z.instanceof(File)).max(5, "Maximum 5 images allowed"),
 });
 
+/**
+ * Type inferred from the assessment schema.
+ */
 type AssessmentSchemaType = z.infer<typeof assessmentSchema>;
 
+/**
+ * AssessmentWizard component.
+ */
 const AssessmentWizard: React.FC = () => {
+  // Auth state
   const { isAuthenticated, isLoading: authLoading } = useAuth();
+
+  // Mutation for creating an assessment
   const createAssessment = useMutation(api.assessments.create);
+
+  // Translation hook
   const { t } = useTranslation("common");
+
+  // Toast notification hook
   const { toast } = useToast();
 
+  // State for current step
   const [step, setStep] = useState(0);
+
+  // State for submission status
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Query for getting the current tenant ID
   const tenantId = useQuery(api.tenants.getCurrentTenantId);
+
+  // Query for getting tenant configuration
   const tenantConfig = useQuery(
     api.tenants.getTenantConfig,
     tenantId ? { id: tenantId } : "skip"
   );
 
+  // Hook for form management
   const {
     control,
     handleSubmit,
@@ -74,15 +106,18 @@ const AssessmentWizard: React.FC = () => {
     mode: "onBlur",
   });
 
+  // Handle next step
   const handleNext = useCallback(async () => {
     const isValid = await trigger();
     if (isValid) setStep((prev) => Math.min(prev + 1, 3));
   }, [trigger]);
 
+  // Handle previous step
   const handlePrevious = useCallback(() => {
     setStep((prev) => Math.max(prev - 1, 0));
   }, []);
 
+  // Handle form submission
   const onSubmit = useCallback(
     async (data: AssessmentSchemaType) => {
       if (!isAuthenticated) {
@@ -93,29 +128,37 @@ const AssessmentWizard: React.FC = () => {
         });
         return;
       }
+      const handleAssessmentSubmit = useCallback(
+        async (formData: AssessmentSchemaType) => {
+          setIsSubmitting(true);
 
-      setIsSubmitting(true);
-      try {
-        const result = await createAssessment(data);
-        toast({
-          title: t("success"),
-          description: t("assessmentCreated"),
-        });
-        // Handle success (e.g., redirect to results page)
-      } catch (error) {
-        console.error("Error creating assessment:", error);
-        toast({
-          title: t("error"),
-          description: t("assessmentCreationFailed"),
-          variant: "destructive",
-        });
-      } finally {
-        setIsSubmitting(false);
-      }
+          try {
+            const assessment = await createAssessment(formData);
+            toast({
+              title: t("success"),
+              description: t("assessmentCreated"),
+            });
+            router.push(`/assessments/${assessment.id}`);
+            setAssessmentData(assessment);
+          } catch (error) {
+            console.error("Error creating assessment:", error);
+            toast({
+              title: t("error"),
+              description: t("assessmentCreationFailed"),
+              variant: "destructive",
+            });
+          } finally {
+            setIsSubmitting(false);
+          }
+        },
+        [createAssessment, router, setAssessmentData, t, toast]
+      );
+      handleAssessmentSubmit(data);
     },
-    [isAuthenticated, createAssessment, t, toast]
+    [createAssessment, router, setAssessmentData, t, toast]
   );
 
+  // Define form steps
   const steps = useMemo(
     () => [
       {
@@ -143,12 +186,15 @@ const AssessmentWizard: React.FC = () => {
     [t, tenantConfig]
   );
 
+  // Current step
   const currentStep = steps[step];
 
+  // Check if data is loading
   if (authLoading || !tenantConfig) {
     return <div>{t("loading")}</div>;
   }
 
+  // Render form
   return (
     <div className="max-w-md mx-auto mt-10">
       <Card>
@@ -201,28 +247,28 @@ const AssessmentWizard: React.FC = () => {
                   }
                 </AlertDescription>
               </Alert>
-            )}
+            )
+            }
+        <CardFooter className="flex justify-between">
+          <Button
+            onClick={handlePrevious}
+            disabled={currentStep === steps[0]}
+          >
+            Previous
+          </Button>
+          <Button
+            onClick={handleNext}
+            disabled={currentStep === steps[steps.length - 1]}
+          >
+            Next
+          </Button>
+            </CardFooter>
           </form>
         </CardContent>
-        <CardFooter>
-          {step > 0 && (
-            <Button onClick={handlePrevious} disabled={isSubmitting}>
-              {t("previous")}
-            </Button>
-          )}
-          {step < steps.length - 1 ? (
-            <Button onClick={handleNext} disabled={isSubmitting}>
-              {t("next")}
-            </Button>
-          ) : (
-            <Button onClick={handleSubmit(onSubmit)} disabled={isSubmitting}>
-              {isSubmitting ? t("submitting") : t("submit")}
-            </Button>
-          )}
-        </CardFooter>
       </Card>
     </div>
   );
-};
+}
 
-export default AssessmentWizard;
+
+    
