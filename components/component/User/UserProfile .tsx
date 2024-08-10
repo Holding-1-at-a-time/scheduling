@@ -61,7 +61,8 @@ export const UserProfile: React.FC = () => {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name</label>
-type="text"
+        <input
+          type="text"
           id="firstName"
           name="firstName"
           value={userDetails.firstName}

@@ -1,5 +1,5 @@
 // app/layout.tsx
-import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
+import { OrganizationSwitcher, UserButton, Protect } from "@clerk/nextjs";
 import { Inter } from "next/font/google";
 import Link from "next/link";
 import ConvexClerkProvider from '../Providers/ConvexClerkProviders';
@@ -8,11 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) 
-
-{ 
+}: Readonly<{ children: React.ReactNode }>) { 
 return (
   <ConvexClerkProvider>
     <Protect>
@@ -38,8 +34,3 @@ return (
   </ConvexClerkProvider>
 );
 };
-
-function Protect({ children }: { children: React.ReactNode }) {
-  return ()
-
-} 
