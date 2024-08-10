@@ -1,23 +1,18 @@
 // File: components/assessment/SelfAssessment.tsx
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { VehicleDetailsForm } from "./VehicleDetailsForm";
 import { ImageUpload } from "./ImageUpload";
 import { ServiceSelection } from "./ServiceSelection";
 import { VehicleHotspotAssessment } from "./VehicleHotspotAssessment";
 import { ReviewStep } from "./ReviewStep";
 import { AssessmentData, Step } from "@/types/assessment";
+import { useRouter } from 'next/router';
 
 export const SelfAssessment: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<Step>("vehicle-details");
@@ -29,9 +24,21 @@ export const SelfAssessment: React.FC = () => {
     hotspots: [],
   });
   const { toast } = useToast();
+  const router = useRouter();
 
   const createAssessment = useMutation(api.assessments.create);
   const updateAssessment = useMutation(api.assessments.update);
+
+  useEffect(() => {
+    const savedData = localStorage.getItem("assessmentData");
+    if (savedData) {
+      setAssessmentData(JSON.parse(savedData));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("assessmentData", JSON.stringify(assessmentData));
+  }, [assessmentData]);
 
   const handleNext = () => {
     const steps: Step[] = [
@@ -71,8 +78,8 @@ export const SelfAssessment: React.FC = () => {
         description: "Your assessment has been submitted successfully.",
         variant: "success",
       });
-      // Redirect to results page or schedule appointment page
-      // router.push(`/assessment/${result.id}`);
+      localStorage.removeItem("assessmentData");
+      router.push(`/assessment/${result.id}`);
     } catch (error) {
       console.error("Error submitting assessment:", error);
       toast({

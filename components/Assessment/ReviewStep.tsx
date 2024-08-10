@@ -6,6 +6,15 @@ import { useToast } from "@/components/ui/use-toast";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { AssessmentData } from "@/types/assessment";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 interface ReviewStepProps {
   assessmentData: AssessmentData;
@@ -18,6 +27,7 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
 }) => {
   const { toast } = useToast();
   const submitAssessment = useMutation(api.assessments.create);
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
   const handleSubmit = async () => {
     try {
@@ -61,7 +71,7 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
         <ul>
           {assessmentData.hotspots.map((hotspot, index) => (
             <li key={index}>
-              {hotspot.part}: {hotspot.issue}
+              {hotspot.part}: {hotspot.issue} (Severity: {hotspot.severity})
             </li>
           ))}
         </ul>
@@ -73,7 +83,33 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
         <p>Interior Photos: {assessmentData.interiorPhotos.length}</p>
       </section>
 
-      <Button onClick={handleSubmit}>Submit Assessment</Button>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogTrigger asChild>
+          <Button>Submit Assessment</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm Submission</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to submit this assessment? This action
+              cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                setIsDialogOpen(false);
+                handleSubmit();
+              }}
+            >
+              Confirm Submission
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
