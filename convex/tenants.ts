@@ -4,6 +4,33 @@ import { mutation, query } from "./_generated/server";
 import { ConvexError } from "./_generated/dataModel";
 import { getUser } from "./users";
 
+export const createTenant = mutation({
+    args: {
+        name: v.string(),
+        subdomain: v.string(),
+    },
+    handler: async (ctx, args) => {
+        const tenantId = await ctx.db.insert('tenants', {
+            name: args.name,
+            subdomain: args.subdomain,
+            createdAt: new Date().toISOString(),
+        });
+        return { id: tenantId };
+    },
+});
+
+export const updateTenantDomain = mutation({
+    args: {
+        tenantId: v.id('tenants'),
+        domain: v.string(),
+    },
+    handler: async (ctx, args) => {
+        await ctx.db.patch(args.tenantId, {
+            verifiedDomain: args.domain,
+        });
+    },
+});
+
 export const getTenantConfig = query({
     args: {},
     handler: async (ctx) => {
