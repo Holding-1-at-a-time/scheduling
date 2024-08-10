@@ -33,6 +33,15 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     const files = event.target.files;
     if (!files) return;
 
+    if (files.length > maxPhotos) {
+      toast({
+        title: "Too many files",
+        description: `You can only upload a maximum of ${maxPhotos} photos.`,
+        variant: "destructive",
+      });
+      return;
+    }
+
     setUploading(true);
     setProgress(0);
 
@@ -40,6 +49,26 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
+
+      if (!file.type.startsWith("image/")) {
+        toast({
+          title: "Invalid file type",
+          description: `${file.name} is not an image file.`,
+          variant: "destructive",
+        });
+        continue;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        // 5MB limit
+        toast({
+          title: "File too large",
+          description: `${file.name} exceeds the 5MB size limit.`,
+          variant: "destructive",
+        });
+        continue;
+      }
+
       try {
         const uploadUrl = await generateUploadUrl();
         await fetch(uploadUrl, {
@@ -79,6 +108,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         multiple
         onChange={handleFileChange}
         disabled={uploading}
+        aria-label="Upload images"
       />
       {uploading && <Progress value={progress} className="mt-2" />}
       <Button
