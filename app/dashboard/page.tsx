@@ -6,6 +6,7 @@ import DashboardContent from './DashboardContent';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import Loading from '@/components/Loading';
 import { OrganizationRole, UserInfo } from '@/types/auth';
+import { EstimatesList } from '../../components/EstimateList';
 
 async function getUserData(): Promise<UserInfo> {
     const user = await currentUser();
@@ -39,10 +40,13 @@ export default async function DashboardPage() {
     const userData = await getUserData();
 
     return (
-        <ErrorBoundary fallback={<div>Something went wrong. Please try again later.</div>}>
-            <Suspense fallback={<Loading />}>
-                <DashboardContent userData={userData} />
-            </Suspense>
-        </ErrorBoundary>
+      <ErrorBoundary
+        fallback={<div>Something went wrong. Please try again later.</div>}
+      >
+        <Suspense fallback={<Loading />}>
+          <EstimatesList />
+          <DashboardContent userData={userData} />
+        </Suspense>
+      </ErrorBoundary>
     );
 }
