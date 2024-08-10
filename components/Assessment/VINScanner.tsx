@@ -8,6 +8,14 @@ interface VINScannerProps {
   onScan: (vin: string) => void;
 }
 
+/**
+ * A functional component that renders a VIN scanner, allowing users to scan a VIN barcode.
+ * It initializes the Quagga library, sets up event listeners for detected codes, and handles errors.
+ * If the scanner fails to initialize, it displays an error message.
+ *
+ * @param {function} onScan - a callback function to handle the scanned VIN
+ * @return {JSX.Element} the VIN scanner component
+ */
 export const VINScanner: React.FC<VINScannerProps> = ({ onScan }) => {
   const scannerRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
