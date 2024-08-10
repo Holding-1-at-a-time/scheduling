@@ -2,9 +2,10 @@ import React from "react";
 import { useUser, useOrganization } from "@clerk/nextjs";
 import { OrganizationSwitcher } from "./OrganizationSwitcher";
 import { OrganizationProfile } from "./OrganizationProfile";
-import { UserProfile } from "./UserProfile";
+import { UserProfile } from "@clerk/clerk-react";
 import { OrganizationMembers } from "./OrganizationMembers";
 import { CreateOrganization } from "./CreateOrganization";
+import { RecentEstimatesInvoices } from "../RecentEStimatesInvoices";
 
 export const Dashboard: React.FC = () => {
   const { user, isSignedIn, isLoaded: isUserLoaded } = useUser();
@@ -32,7 +33,6 @@ export const Dashboard: React.FC = () => {
                 </h2>
                 <OrganizationProfile />
               </section>
-
               <section>
                 <h2 className="text-2xl font-semibold mb-4">Team Members</h2>
                 <OrganizationMembers />
@@ -47,13 +47,12 @@ export const Dashboard: React.FC = () => {
             </section>
           )}
         </div>
-
+        <RecentEstimatesInvoices />
         <div className="space-y-8">
           <section>
             <h2 className="text-2xl font-semibold mb-4">Your Profile</h2>
             <UserProfile />
           </section>
-
           <section>
             <h2 className="text-2xl font-semibold mb-4">Your Businesses</h2>
             <OrganizationSwitcher />
