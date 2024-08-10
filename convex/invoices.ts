@@ -1,79 +1,39 @@
-import { query } from "./_generated/server";
 
+// File: convex/invoices.ts
+import { query } from "./_generated/server";
+import { v } from "convex/values";
 
 export const listRecent = query({
-    args: {},
-    handler: async (ctx) => {
-        return await ctx.db.query("invoices")
+    args: {
+        tenantId: v.string(),
+        page: v.number(),
+        pageSize: v.number(),
+    },
+    handler: async (ctx, args) => {
+        const { tenantId, page, pageSize } = args;
+
+        // Basic security check
+        const identity = await ctx.auth.getUserIdentity();
+        if (!identity) {
+            throw new Error("Unauthenticated");
+        }
+
+        // Fetch total count for pagination
+        const totalCount = await ctx.db
+            .query("invoices")
+            .filter(q => q.eq(q.field("tenantId"), tenantId))
+            .count();
+
+        // Fetch paginated invoices
+        const invoices = await ctx.db
+            .query("invoices")
+            .filter(q => q.eq(q.field("tenantId"), tenantId))
             .order("desc")
-            .take(6);
+            .paginate(page, pageSize);
+
+        return {
+            items: invoices,
+            totalCount,
+        };
     },
 });
-
-
-export const listInvoices = query({
-    args: {},
-    handler: async (ctx) => {
-        return await ctx.db.query("invoices").collect();
-    },
-})
-
-export const getInvoice = query({
-    args: {
-        id: "id",
-    },
-    handler: async (ctx, args) => {
-        return await ctx.db
-            .query("invoices")
-            .filter((q) => q.eq(q.field("id"), args.id))
-            .first();
-    },
-})
-
-export const createInvoice = query({
-    args: {
-        clientName: "string",
-        total: "number",
-    },
-    handler: async (ctx, args) => {
-        return await ctx.db
-            .query("invoices")
-            .insert({
-                clientName: args.clientName,
-                total: args.total,
-                createdAt: new Date().getTime(),
-            })
-            .single();
-    },
-})
-
-export const updateInvoice = query({
-    args: {
-        id: "id",
-        clientName: "string",
-        total: "number",
-    },
-    handler: async (ctx, args) => {
-        return await ctx.db
-            .query("invoices")
-            .filter((q) => q.eq(q.field("id"), args.id))
-            .update({
-                clientName: args.clientName,
-                total: args.total,
-            })
-            .single();
-    },
-})
-
-export const deleteInvoice = query({
-    args: {
-        id: "id",
-    },
-    handler: async (ctx, args) => {
-        return await ctx.db
-            .query("invoices")
-            .filter((q) => q.eq(q.field("id"), args.id))
-            .delete();
-    },
-})
-

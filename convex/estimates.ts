@@ -1,76 +1,38 @@
-import { query } from "./_generated/server"
+// File: convex/estimates.ts
+import { query } from "./_generated/server";
+import { v } from "convex/values";
 
 export const listRecent = query({
-    args: {},
-    handler: async (ctx) => {
-        return await ctx.db.query("estimates")
+    args: {
+        tenantId: v.string(),
+        page: v.number(),
+        pageSize: v.number(),
+    },
+    handler: async (ctx, args) => {
+        const { tenantId, page, pageSize } = args;
+
+        // Basic security check
+        const identity = await ctx.auth.getUserIdentity();
+        if (!identity) {
+            throw new Error("Unauthenticated");
+        }
+
+        // Fetch total count for pagination
+        const totalCount = await ctx.db
+            .query("estimates")
+            .filter(q => q.eq(q.field("tenantId"), tenantId))
+            .count();
+
+        // Fetch paginated estimates
+        const estimates = await ctx.db
+            .query("estimates")
+            .filter(q => q.eq(q.field("tenantId"), tenantId))
             .order("desc")
-            .take(6);
-    },
-});
+            .paginate(page, pageSize);
 
-export const listEstimates = query({
-    args: {},
-    handler: async (ctx) => {
-        return await ctx.db.query("estimates").collect();
-    },
-});
-
-export const getEstimate = query({
-    args: {
-        id: "id",
-    },
-    handler: async (ctx, args) => {
-        return await ctx.db
-            .query("estimates")
-            .filter((q) => q.eq(q.field("id"), args.id))
-            .first();
-    },
-});
-
-export const createEstimate = query({
-    args: {
-        clientName: "string",
-        total: "number",
-    },
-    handler: async (ctx, args) => {
-        return await ctx.db
-            .query("estimates")
-            .insert({
-                clientName: args.clientName,
-                total: args.total,
-                createdAt: new Date().getTime(),
-            })
-            .single();
-    },
-});
-
-export const updateEstimate = query({
-    args: {
-        id: "id",
-        clientName: "string",
-        total: "number",
-    },
-    handler: async (ctx, args) => {
-        return await ctx.db
-            .query("estimates")
-            .filter((q) => q.eq(q.field("id"), args.id))
-            .update({
-                clientName: args.clientName,
-                total: args.total,
-            })
-            .single();
-    },
-});
-
-export const deleteEstimate = query({
-    args: {
-        id: "id",
-    },
-    handler: async (ctx, args) => {
-        return await ctx.db
-            .query("estimates")
-            .filter((q) => q.eq(q.field("id"), args.id))
-            .delete();
+        return {
+            items: estimates,
+            totalCount,
+        };
     },
 });

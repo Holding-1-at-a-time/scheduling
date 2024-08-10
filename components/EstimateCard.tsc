@@ -1,0 +1,35 @@
+// File: src/components/EstimateCard.tsx
+import React from 'react';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+
+interface Estimate {
+  _id: string;
+  number: string;
+  clientName: string;
+  total: number;
+  status: 'pending' | 'approved' | 'declined';
+  createdAt: number;
+}
+
+export const EstimateCard: React.FC<{ estimate: Estimate }> = ({ estimate }) => (
+  <Card>
+    <CardHeader>
+      <CardTitle className="flex justify-between">
+        <span>Estimate #{estimate.number}</span>
+        <Badge>{estimate.status}</Badge>
+      </CardTitle>
+      <CardDescription>{estimate.clientName}</CardDescription>
+    </CardHeader>
+    <CardContent>
+      <p className="text-2xl font-bold">${estimate.total.toFixed(2)}</p>
+      <p className="text-sm text-muted-foreground">
+        Created on {new Date(estimate.createdAt).toLocaleDateString()}
+      </p>
+    </CardContent>
+    <CardFooter>
+      <Button className="w-full">View Details</Button>
+    </CardFooter>
+  </Card>
+);
