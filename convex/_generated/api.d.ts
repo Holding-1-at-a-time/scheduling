@@ -16,9 +16,13 @@ import type {
 } from "convex/server";
 import type * as advanceSettings from "../advanceSettings.js";
 import type * as assessments from "../assessments.js";
+import type * as estimates from "../estimates.js";
 import type * as files from "../files.js";
+import type * as invoices from "../invoices.js";
 import type * as services from "../services.js";
 import type * as tenants from "../tenants.js";
+import type * as users from "../users.js";
+import type * as vehicleAssessment from "../vehicleAssessment.js";
 import type * as vehicleParts from "../vehicleParts.js";
 import type * as vehicles from "../vehicles.js";
 
@@ -33,9 +37,13 @@ import type * as vehicles from "../vehicles.js";
 declare const fullApi: ApiFromModules<{
   advanceSettings: typeof advanceSettings;
   assessments: typeof assessments;
+  estimates: typeof estimates;
   files: typeof files;
+  invoices: typeof invoices;
   services: typeof services;
   tenants: typeof tenants;
+  users: typeof users;
+  vehicleAssessment: typeof vehicleAssessment;
   vehicleParts: typeof vehicleParts;
   vehicles: typeof vehicles;
 }>;

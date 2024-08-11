@@ -1,23 +1,38 @@
-// app/auth/sign-up/page.tsx
-import { SignUp } from "@clerk/nextjs";
+// File: app/(auth)/sign-up/page.tsx
 
-export default function SignUpPage() {
+"use client";
+
+import { SignUp } from "@clerk/nextjs";
+import { useToast } from "@/components/ui/use-toast";
+
+const SignUpPage = () => {
+  const { toast } = useToast();
+
+  const handleSignUpError = (error: Error) => {
+    console.error("Sign up error:", error);
+    toast({
+      title: "Sign Up Failed",
+      description:
+        "There was an error creating your account. Please try again.",
+      variant: "destructive",
+    });
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <SignUp
-        path="/auth/sign-up"
-        routing="path"
-        signInUrl="/auth/sign-in"
-        afterSignUpUrl="/dashboard"
         appearance={{
           elements: {
-            rootBox: "mx-auto max-w-md w-full",
-            card: "shadow-lg rounded-lg",
+            rootBox: "shadow-xl rounded-lg",
+            card: "p-8",
           },
         }}
-      >
-        <SignUp.OrganizationProfile />
-      </SignUp>
+        afterSignUpUrl="/dashboard"
+        signInUrl="/sign-in"
+        onError={handleSignUpError}
+      />
     </div>
   );
-}
+};
+
+export default SignUpPage;

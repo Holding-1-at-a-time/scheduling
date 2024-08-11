@@ -1,21 +1,37 @@
-// app/auth/sign-in/page.tsx
-import { SignIn } from "@clerk/nextjs";
+// File: app/(auth)/sign-in/page.tsx
 
-export default function SignInPage() {
-    return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <SignIn
-                path="/auth/sign-in"
-                routing="path"
-                signUpUrl="/auth/sign-up"
-                afterSignInUrl="/dashboard"
-                appearance={{
-                    elements: {
-                        rootBox: "mx-auto max-w-md w-full",
-                        card: "shadow-lg rounded-lg", screen
-                    },
-                }}
-            />
-        </div>
-    );
-}
+"use client";
+
+import { SignIn } from "@clerk/nextjs";
+import { useToast } from "@/components/ui/use-toast";
+
+const SignInPage = () => {
+  const { toast } = useToast();
+
+  const handleSignInError = (error: Error) => {
+    console.error("Sign in error:", error);
+    toast({
+      title: "Sign In Failed",
+      description: "There was an error signing in. Please try again.",
+      variant: "destructive",
+    });
+  };
+
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <SignIn
+        appearance={{
+          elements: {
+            rootBox: "shadow-xl rounded-lg",
+            card: "p-8",
+          },
+        }}
+        afterSignInUrl="/dashboard"
+        signUpUrl="/sign-up"
+        onError={handleSignInError}
+      />
+    </div>
+  );
+};
+
+export default SignInPage;
