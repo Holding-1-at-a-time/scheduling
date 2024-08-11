@@ -26,7 +26,6 @@ const SignInPage = () => {
             card: "p-8",
           },
         }}
-        afterSignInUrl="/dashboard"
         signUpUrl="/sign-up"
         onError={handleSignInError}
       />
