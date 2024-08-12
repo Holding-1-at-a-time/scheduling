@@ -114,8 +114,8 @@ importers:
         specifier: ^6.21.0
         version: 6.21.0(@typescript-eslint/parser@7.2.0(eslint@9.8.0)(typescript@5.2.2))(eslint@9.8.0)(typescript@5.2.2)
       autoprefixer:
-        specifier: 10.4.15
-        version: 10.4.15(postcss@8.4.41)
+        specifier: 10.4.20
+        version: 10.4.20(postcss@8.4.41)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -1823,8 +1823,8 @@ packages:
   asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
 
-  autoprefixer@10.4.15:
-    resolution: {integrity: sha512-KCuPB8ZCIqFdA4HwKXsvz7j6gvSDNhDP7WnUjBleRkKjPdvCmHFuQ77ocavI8FT6NdvlBnE2UFr2H4Mycn8Vew==}
+  autoprefixer@10.4.20:
+    resolution: {integrity: sha512-XY25y5xSv/wEoqzDyXXME4AFfkZI0P23z6Fs3YgymDnKJkCGOnkL0iTxCa85UTqaSgfcqyf3UA6+c7wUvx/16g==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
     peerDependencies:
@@ -6089,7 +6089,7 @@ snapshots:
 
   asynckit@0.4.0: {}
 
-  autoprefixer@10.4.15(postcss@8.4.41):
+  autoprefixer@10.4.20(postcss@8.4.41):
     dependencies:
       browserslist: 4.23.3
       caniuse-lite: 1.0.30001651
