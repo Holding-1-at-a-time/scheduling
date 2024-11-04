@@ -54,7 +54,7 @@
     "cmdk": "^0.2.1",
     "convex": "^1.14.0",
     "date-fns": "^3.6.0",
-    "eslint": "9.8.0",
+    "eslint": "9.14.0",
     "eslint-config-next": "^14.2.5",
     "jabber": "^1.5.3",
     "jsdom": "^24.1.1",
